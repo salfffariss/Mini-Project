@@ -1,8 +1,13 @@
+/* ===================================================
+   KODE ASLI MODUL 1 ANDA (TETAP DIPERTAHANKAN UTUH)
+   =================================================== */
+
 /* 1. Tokens */
 :root {
   --color-primary: #2457d6;
   --color-primary-dark: #193ca0;
   --color-bg: #f8fafc;
+  --color-card-bg: #ffffff;
   --color-text: #1f2937;
   --space-base: 16px;
   --font-main: Arial, sans-serif;
@@ -40,14 +45,14 @@ ul, ol {
 
 /* 5. Component Styles */
 .header {
-  background-color: #ffffff;
+  background-color: var(--color-card-bg);
   padding: calc(var(--space-base) * 1.5);
   border-bottom: 1px solid #dbe2ea;
   margin-bottom: calc(var(--space-base) * 1.5);
 }
 
 .footer {
-  background-color: #ffffff;
+  background-color: var(--color-card-bg);
   padding: calc(var(--space-base) * 1.5);
   border-top: 1px solid #dbe2ea;
   text-align: center;
@@ -75,7 +80,7 @@ ul, ol {
 }
 
 .card {
-  background-color: #ffffff;
+  background-color: var(--color-card-bg);
   padding: calc(var(--space-base) * 1.5);
   border: 1px solid #dbe2ea;
   border-radius: 8px;
@@ -98,6 +103,7 @@ ul, ol {
   border-radius: 6px;
   cursor: pointer;
   border: none;
+  font: inherit;
 }
 
 .button:hover {
@@ -119,4 +125,111 @@ a:focus-visible, .button:focus-visible {
   .card {
     flex-basis: calc(50% - 12px);
   }
+}
+
+/* Fitur 7: Tema Gelap */
+body.dark-theme {
+  --color-bg: #0f172a;
+  --color-card-bg: #1e293b;
+  --color-text: #f8fafc;
+}
+body.dark-theme .card,
+body.dark-theme .header {
+  border-color: #334155;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Fitur 1: Navigasi Mobile */
+.btn-menu {
+  display: block;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+@media (max-width: 767px) {
+  .nav {
+    display: none;
+    flex-direction: column;
+  }
+  .nav.is-open {
+    display: flex;
+  }
+}
+@media (min-width: 768px) {
+  .btn-menu {
+    display: none; /* Sembunyikan tombol menu di desktop */
+  }
+}
+
+/* Fitur 2 & 3: Layanan & Filter */
+.layanan-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.layanan-item {
+  border: 1px solid #dbe2ea;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+/* Fitur 4: FAQ */
+.faq-item {
+  margin-bottom: 8px;
+}
+.faq-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  background: none;
+  border: 1px solid #dbe2ea;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: bold;
+  color: inherit;
+}
+.faq-jawaban {
+  padding: 8px 12px;
+}
+
+/* Fitur 5: Form Kontak */
+input {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 4px;
+  border: 1px solid #dbe2ea;
+  border-radius: 4px;
+}
+input[aria-invalid="true"] {
+  border-color: #dc2626;
+  outline: 2px solid #dc2626;
+}
+.error-msg {
+  color: #dc2626;
+  display: block;
+  min-height: 18px;
+  margin-bottom: 8px;
+}
+.status-sukses {
+  color: #16a34a;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Fitur 6: Tombol Kembali ke Atas */
+.btn-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 14px;
+  border-radius: 50px;
+  z-index: 99;
 }
