@@ -37,3 +37,40 @@ Target berikutnya adalah memperkuat penguasaan saya di ranah layouting CSS moder
  ## Url
  https://github.com/salfffariss/Mini-Project  
  https://salfffariss.github.io/Mini-Project/  
+
+ # Praktikum Modul 2 - Salman Alfarisi Firdaus / 251511030
+
+## Ringkasan halaman
+Halaman ini merupakan pengembangan lanjutan dari landing page statis Modul 1 menjadi landing page yang interaktif untuk Program Studi JTK (Jurusan Teknik Komputer dan Informatika) Politeknik Negeri Bandung. Seluruh interaktivitas halaman dibangun menggunakan Vanilla JavaScript (ES6) murni tanpa bergantung pada *framework* maupun *library* eksternal. Fitur interaktif yang ditambahkan mencakup menu navigasi *mobile*, daftar layanan dinamis yang dirender dari data objek, penyaringan (*filter*) kategori, komponen FAQ *accordion*, formulir kontak tervalidasi, tombol kembali ke atas, serta kemampuan pergantian tema visual (*dark mode*).
+
+## Tiga keputusan teknis
+1. **Pemisahan Peran dan Manipulasi DOM Murni:** Pembuatan elemen dinamis (seperti kartu layanan) menggunakan metode `document.createElement()` dan pengisian nilai menggunakan `.textContent`, bukan `innerHTML`. Keputusan ini menjaga keamanan aplikasi dari risiko celah injeksi kode berbahaya (*Cross-Site Scripting* / XSS) saat menampilkan data atau teks masukan pengguna.
+2. **Pengendalian State Berbasis Class CSS dan Aksesibilitas (WAI-ARIA):** JavaScript tidak memanipulasi properti visual secara langsung (*inline style*), melainkan hanya mengubah status (*state*) melalui penambahan/penghapusan *class* (contoh: `.dark-theme` pada `body` dan `.is-open` pada menu navigasi). Selain itu, atribut aksesibilitas seperti `aria-expanded` dan `aria-invalid` diperbarui secara dinamis agar halaman tetap ramah bagi pembaca layar (*screen reader*).
+3. **Penanganan Event Terpusat Tanpa Reload Halaman:** Seluruh interaksi pengguna dipasang secara deklaratif menggunakan `addEventListener` pada file JavaScript eksternal yang dimuat dengan atribut `defer`. Pada formulir kontak, pemanggilan `event.preventDefault()` diterapkan untuk menahan perilaku bawaan *browser* yang memuat ulang halaman, sehingga aplikasi tetap berjalan mulus dalam satu siklus interaksi (*single-page interaction*).
+
+## Masalah, diagnosis, dan perbaikan
+1. **Masalah:** Formulir kontak memuat ulang (*reload*) halaman secara otomatis saat tombol "Kirim Pesan" ditekan, sehingga pesan keberhasilan dan status validasi langsung hilang dari layar.  
+   **Diagnosis:** Secara bawaan (*default behavior*), *event submit* pada elemen `<form>` akan mencoba mengirimkan data ke server dan me-*refresh* dokumen HTML jika tidak dicegah.  
+   **Perbaikan:** Memanggil fungsi `event.preventDefault()` pada baris pertama *handler event submit* untuk menghentikan aksi bawaan *browser*, kemudian memproses validasi nama dan email secara lokal melalui JavaScript.
+2. **Masalah:** Kartu layanan bertumpuk dan berulang (*duplikasi render*) saat pengguna mengubah pilihan pada *dropdown* filter kategori.  
+   **Diagnosis:** Kontainer daftar kartu langsung diisi oleh kartu-kartu baru tanpa mengosongkan elemen-elemen kartu yang sudah dirender pada pemilihan filter sebelumnya.  
+   **Perbaikan:** Menggunakan metode `daftarLayanan.replaceChildren()` di awal fungsi `renderLayanan()` untuk membersihkan seluruh elemen anak secara instan sebelum daftar hasil penyaringan baru disisipkan ke DOM.
+
+## Hasil pengujian empat viewport
+* **Viewport 320px (Mobile S):** Lulus uji. Tombol menu navigasi muncul dan berfungsi membuka/menutup tautan menu dengan nilai `aria-expanded` yang sinkron. Seluruh teks kartu layanan dan form kontak tertata rapi dalam satu kolom tanpa *overflow* horizontal.
+* **Viewport 375px (Mobile M):** Lulus uji. Interaksi FAQ *accordion* berjalan konsisten di mana membuka satu pertanyaan otomatis menutup pertanyaan lain. Form kontak menolak input kosong dengan pesan peringatan yang jelas.
+* **Viewport 768px (Tablet):** Lulus uji. Tombol navigasi *mobile* otomatis tersembunyi dan navigasi kembali ke tata letak horizontal. Daftar layanan dan kartu konten beradaptasi menjadi susunan dua kolom sejajar yang proporsional.
+* **Viewport 1024px (Desktop):** Lulus uji. Fitur tema gelap (*dark theme*) mengubah kontras warna latar belakang dan kartu secara merata tanpa merusak keterbacaan teks. Tombol melayang "↑ Ke Atas" bekerja mulus menggulung layar kembali ke posisi puncak. Seluruh fitur dapat dinavigasi sepenuhnya menggunakan *keyboard* (*Tab* dan *Enter*).
+
+## Refleksi belajar
+Pengembangan Modul 2 ini memberikan pemahaman mendalam mengenai peran JavaScript sebagai pengendali perilaku (*behavior*) di atas struktur HTML dan presentasi CSS. Tantangan terbesar bukan hanya membuat antarmuka bergerak, melainkan bagaimana memastikan perubahan DOM dilakukan secara aman, terprediksi, dan mempertahankan aksesibilitas. Saya menyadari bahwa manipulasi teks pengguna wajib dilakukan menggunakan `.textContent` guna mencegah celah keamanan injeksi.
+
+Selain itu, pemisahan tanggung jawab antara logika data dan pembaruan antarmuka terbukti sangat memudahkan proses pelacakan masalah (*debugging*). Mengelola transisi status tombol dan formulir memberikan pelajaran bahwa umpan balik visual yang jelas bagi pengguna—baik saat input valid, salah, maupun saat sistem memproses—merupakan pilar utama pengalaman pengguna (*UX*) yang baik.
+
+Target berikutnya adalah memperdalam pemrograman *asynchronous* tingkat lanjut untuk integrasi data dinamis dari REST API publik, serta mempelajari modularisasi kode JavaScript modern menggunakan *ES Modules* (`import`/`export`).
+
+## Log AI atau sumber bantuan
+* **Pertanyaan:** "Bagaimana cara menyusun fungsi filter daftar kartu berbasis array of objects pada Vanilla JS agar tidak merusak array data aslinya dan mencegah duplikasi elemen pada DOM?"
+* **Jawaban AI (Intisari):** AI menyarankan untuk memanfaatkan metode non-mutasi `Array.prototype.filter()` guna menghasilkan salinan array baru sesuai kategori terpilih, serta selalu memanggil `container.replaceChildren()` sebelum perulangan pembuatan elemen DOM dimulai.
+* **The Fact Check:** Saya memverifikasi metode `replaceChildren()` melalui dokumentasi MDN Web Docs. Dokumentasi mengonfirmasi bahwa metode ini merupakan cara paling efisien dan bersih untuk mengosongkan seluruh node anak dari sebuah elemen DOM sebelum diisi kembali.
+* **The Twist:** Selain menerapkan fungsi filter dan render tersebut, saya berinisiatif menambahkan penanganan kondisi kosong (*empty state*): jika hasil filter menghasilkan array kosong, antarmuka akan secara otomatis merender paragraf pemberitahuan khusus yang menginformasikan pengguna bahwa data kategori tersebut tidak ditemukan.
